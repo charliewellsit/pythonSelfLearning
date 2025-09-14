@@ -68,6 +68,22 @@ print_p("Test Paragraph!")
 # A decorator allows us to "attach" new behavior
 # to an existing function without changing its code.
 
+# --- decorator convention ---
+# A decorator is a function that takes another function as an argument,
+# adds some kind of functionality and returns another function.
+# The inner function is called a "wrapper" function.
+# 1. Define a decorator
+def decorator(func):
+    def wrapper():
+        print("Before function")
+        func()                # call the original function
+        print("After function")
+    return wrapper           # return the new function
+
+# 2. Use the decorator
+@decorator
+def say_hello():
+    print("Hello!")
 
 # --- Traditional way ---
 def reminder(func):
@@ -81,8 +97,13 @@ def action2():
     print("I want to buy sth2")
 
 reminder(action1)
+# Output:
+# I want to buy sth1
+# Don't forget...
 reminder(action2)
-
+# Output:
+# I want to buy sth2
+# Don't forget...
 
 # --- Using decorator ---
 def reminder(func):
@@ -96,6 +117,9 @@ def action3():
     print("I want to buy sth3")
 
 action3()
+# Output:
+# I want to buy sth3
+# Don't forget...
 
 
 # ----------------------------------------
@@ -116,6 +140,22 @@ def div(a, b):
 div = check(div)  # attach decorator manually
 print(div(10, 0)) # Can't divide by 0
 
+# Explanation:
+# 'def inside(a,b)' → only defines the function. It does not run its code.
+# when you do 'div = check(div)'.
+# check(div) would take the func 'div' and return another function 'inside'.
+# So now the original func 'div' is gone and returns 'inside' instead.
+# so 'div = check(div)' means 'div = inside'
+# *******************************Important******************************************
+# * The core of the decorator is to replace arg function with the wrapper function.*
+# **********************************************************************************
+# At this point, 'inside' has not run yet.
+# When you do 'div(10,0)', it actually means 'inside(10,0)' now.
+# Now 'inside' runs its code, which checks if b==0 first.
+# If b==0, it prints the message and returns None.
+# If b!=0, it runs 'return func(a,b)', which calls the original 'div' function.
+
+
 
 # Better usage with @decorator
 @check
@@ -125,9 +165,3 @@ def div2(a, b):
 print(div2(10, 0))  # Can't divide by 0
 print(div2(10, 2))  # 5.0
 
-
-# ----------------------------------------
-# TIP:
-# - Returning "func()" executes the function immediately
-# - Returning "func" passes the function itself (for later use)
-# ----------------------------------------
