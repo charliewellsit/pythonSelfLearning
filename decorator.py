@@ -37,6 +37,11 @@ def display(message):
 message1 = display("Hi")  # returns inner_func
 message1()                # executes inner_func → Display: Hi
 
+# Key point: function does not execute until we call it with ()
+# when inner_func is returned, it's not executed yet.
+# So message1 = display("Hi") means message1 is now inner_func without executing it.
+# When you add () after message1, it executes inner_func. And inner_func has stored "Hi".
+
 
 # Example: HTML tag wrapper
 def html_tag(tag):
